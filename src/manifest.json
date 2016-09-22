@@ -1,0 +1,40 @@
+{
+    "manifest_version": 2,
+
+    "name": "Marmoset Plus Chrome",
+    "description": "Makes UWaterloo's marmoset submit server easier to use.",
+    "version": "1.0",
+
+    "icons": {
+        "256": "media/icon256.png"
+    },
+
+    "permissions": [
+        "tabs",
+        "*://marmoset.student.cs.uwaterloo.ca/**"
+    ],
+
+    "browser_action": {
+        "default_icon": {
+            "256": "media/icon256.png"
+        }
+    },
+
+    "content_scripts": [
+        {
+            "matches": [
+                "https://marmoset.student.cs.uwaterloo.ca/view/course.jsp*"
+            ],
+            "js": [
+                "lib/init.js"
+            ]
+        }
+    ],
+
+    "web_accessible_resources": [
+        "style/*.css",
+        "views/*.html"
+    ],
+
+    "$schema": "http://json.schemastore.org/chrome-manifest"
+}

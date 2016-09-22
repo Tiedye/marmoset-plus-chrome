@@ -1,0 +1,15 @@
+{
+  "name": "marmoset-plus-chrome",
+  "version": "1.0.0",
+  "description": "Makes UWaterloo's marmoset submit server easier to use.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Whitney",
+  "license": "UNLICENCED",
+  "private": true,
+  "devDependencies": {
+    "@types/chrome": "0.0.33",
+    "typescript": "^2.0.2"
+  }
+}
