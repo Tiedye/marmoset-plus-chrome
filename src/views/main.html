@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
 <nav class="navbar navbar-full navbar-dark bg-inverse bg-faded">
     <div class="container">
         <span class="navbar-brand">Marmoset <small>student.cs.uwaterloo.ca</small></span>
@@ -11,13 +14,13 @@
                 <div class="card-block">
                     <h4 class="card-title m-b-0">Projects</h4>
                 </div>
-                <table class="table table-striped">
+                <table class="table table-striped m-b-0 v-center">
                     <thead class="thead-default">
                         <tr>
                             <th>Question ID</th>
-                            <th>Last Result</th>
-                            <th>Best Result</th>
-                            <th>Due</th>
+                            <th class="text-xs-center">Last Result</th>
+                            <th class="text-xs-center">Best Result</th>
+                            <th colspan="10">Due</th>
                         </tr>
                     </thead>
                     <tbody id="projects">
@@ -26,4 +29,17 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="card info-box">
+    <table class="table v-center small m-b-0">
+        <thead class="thead-default">
+            <tr>
+                <th class="text-xs-right" colspan="2">Points</th>
+                <th>Type</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
