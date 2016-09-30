@@ -44,13 +44,17 @@ let test_box: HTMLElement;
 let test_content: HTMLElement;
 
 function moveTestBox(ev: MouseEvent) {
+    let h = window.innerHeight;
+    let dh = test_box.clientHeight;
+    let y = ev.clientY;
+    if (y + dh > h) {
+        y = h - dh;
+    }
     test_box.style.left = ''+ev.clientX;
-    test_box.style.top = ''+ev.clientY;
+    test_box.style.top = ''+y;
 }
 
 function openTest(): void {
-    console.log()
-    ++test_open_count;
     if (!test_open) {
         document.addEventListener('mousemove', moveTestBox);
         test_box.classList.add('open');
@@ -59,8 +63,7 @@ function openTest(): void {
 }
 
 function closeTest(): void {
-    --test_open_count;
-    if (!test_open_count) {
+    if (test_open) {
         document.removeEventListener('mousemove', moveTestBox);
         test_box.classList.remove('open');
         test_open = false;
@@ -70,7 +73,6 @@ function closeTest(): void {
 
 
 function showTestDetails(test: string): void {
-    console.log(`mouse over: ${test}`);
     let result: SubmissionResult;
     if (test.startsWith('lr_')) {
         result = allResultsByProject.get(test.substr(3)).last;
@@ -88,6 +90,7 @@ function showTestDetails(test: string): void {
             let passed = document.createElement('td');
             let p_icon = document.createElement('i');
             p_icon.classList.add('fa', `fa-${result.passed ? 'check' : 'times'}-circle`);
+            p_icon.style.color = result.passed ? 'green' : 'red';
             passed.appendChild(p_icon);
             let points = document.createElement('td');
             points.innerText = ''+result.points;
@@ -107,7 +110,6 @@ function showTestDetails(test: string): void {
 }
 
 function hideTestDetails(): void {
-    console.log(`mouse out`);
     closeTest();
 }
 
@@ -124,15 +126,20 @@ function getResultDetails(result: SubmissionResult): Promise<SubmissionResult> {
         return getHTML(`https://marmoset.student.cs.uwaterloo.ca/view/submission.jsp?submissionPK=${result.key}`).then(html => {
             let rows = html.match(/<tr[^>]*>([\s\S]*?)<\/tr>/g);
             rows.shift();
+
             let results = rows.map(row => {
                 let tds = row.match(/<td[^>]*>([\s\S]*?)<\/td>/g);
+                let shift = 0;
+                if (tds.length == 8) {
+                    shift = 1;
+                }
                 let type = tds[0].match(/>([^<]*)</)[1];
                 let index = +tds[1].match(/>([^<]*)</)[1];
                 let passed = tds[2].match(/>([^<]*)</)[1] == 'passed';
-                let points = +tds[3].match(/>([^<]*)</)[1];
-                let name = tds[4].match(/>([^<]*)</)[1];
-                let shortResult = tds[5].match(/>\s*([^<]+?)\s*</)[1];
-                let longResult = tds[6].match(/>\s*([^<]+?)\s*</)[1];
+                let points = +tds[3+shift].match(/>([^<]*)</)[1];
+                let name = tds[4+shift].match(/>([^<]*)</)[1];
+                let shortResult = tds[5+shift].match(/>\s*([^<]+?)\s*</)[1];
+                let longResult = tds[6+shift].match(/>\s*([^<]+?)\s*</)[1];
                 return <TestResult>{
                     index: index,
                     longResult: longResult,
@@ -247,13 +254,11 @@ getHTML(chrome.runtime.getURL('views/main.html')).then(html => {
         lastResult.classList.add('text-xs-center');
         lastResult.innerText = 'Loading';
         lastResult.addEventListener('mouseenter', () => showTestDetails('lr_' + project.key));
-        lastResult.addEventListener('mouseleave', () => hideTestDetails());
         let bestResult = document.createElement('td');
         bestResult.id = `br_${project.key}`;
         bestResult.classList.add('text-xs-center');
         bestResult.innerText = 'Loading';
         bestResult.addEventListener('mouseenter', () => showTestDetails('br_' + project.key));
-        bestResult.addEventListener('mouseleave', () => hideTestDetails());
         let due = document.createElement('td');
         due.innerText = dtFormat.format(project.due);
         let buttons = document.createElement('td');
@@ -276,6 +281,7 @@ getHTML(chrome.runtime.getURL('views/main.html')).then(html => {
         row.appendChild(bestResult);
         row.appendChild(due);
         row.appendChild(buttons);
+        row.addEventListener('mouseleave', () => hideTestDetails())
         tbody.appendChild(row);
 
         // load tests

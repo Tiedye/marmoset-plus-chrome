@@ -12,3 +12,13 @@
 .open {
     display: inline-block !important;
 }
+
+.btn-group>.btn {
+    float: none !important;
+}
+.btn-group {
+    white-space: nowrap;
+}
+.table-responsive td:last-child {
+    width: 1%;
+}
