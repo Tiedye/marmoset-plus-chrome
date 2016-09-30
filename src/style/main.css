@@ -6,14 +6,9 @@
     position: fixed !important;
     display: none !important;
     pointer-events: none;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .open {
     display: inline-block !important;
-}
-
-tr td:last-child {
-    width: 1px;
-    white-space: nowrap;
 }

@@ -219,6 +219,14 @@ let projects = Array.from(document.querySelectorAll('tr.r0, tr.r1')).map(row => 
 document.styleSheets[0].disabled = true;
 
 getHTML(chrome.runtime.getURL('views/main.html')).then(html => {
+    let template = document.createElement('template');
+    template.innerHTML = '<meta charset="utf-8">';
+    template.innerHTML += '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
+    template.innerHTML += '<meta http-equiv="x-ua-compatible" content="ie=edge">';
+    for(let i = 0; i < template.content.childNodes.length; ++i) {
+        document.head.appendChild(template.content.childNodes.item(0));
+    }
+
     document.body.innerHTML = `<link rel="stylesheet" href="${chrome.runtime.getURL('style/main.css')}">`;
     document.body.innerHTML += html;
 
@@ -249,16 +257,20 @@ getHTML(chrome.runtime.getURL('views/main.html')).then(html => {
         let due = document.createElement('td');
         due.innerText = dtFormat.format(project.due);
         let buttons = document.createElement('td');
+        let buttonGroup = document.createElement('div');
+        buttonGroup.classList.add('btn-group', 'btn-group-sm');
+        buttonGroup.style.whiteSpace = 'nowarp';
         let detailBtn = document.createElement('button');
-        detailBtn.classList.add('btn', 'btn-primary', 'btn-sm');
+        detailBtn.classList.add('btn', 'btn-primary');
         detailBtn.innerText = 'Show';
         detailBtn.addEventListener('click', () => showMore(project, row));
-        buttons.appendChild(detailBtn);
+        buttonGroup.appendChild(detailBtn);
         let submitBtn = document.createElement('button');
-        submitBtn.classList.add('btn', 'btn-success', 'btn-sm');
+        submitBtn.classList.add('btn', 'btn-success');
         submitBtn.innerText = 'Submit';
         submitBtn.addEventListener('click', () => showSubmitDialogue(project.key));
-        buttons.appendChild(submitBtn);
+        buttonGroup.appendChild(submitBtn);
+        buttons.appendChild(buttonGroup);
         row.appendChild(name);
         row.appendChild(lastResult);
         row.appendChild(bestResult);
